@@ -1,0 +1,53 @@
+:root {
+  /* Brand Color Palette */
+  --primary: #E5A2A9;
+  --primary-hover: #D88E96;
+  --secondary: #EFbbc1;
+  --secondary-hover: #E3A3A9;
+  --background: #F2E4CA;
+  --light-accent: #FCC9D2;
+  --accent: #CCA470;
+  --accent-hover: #B8905B;
+
+  /* Neutral & Surface Colors */
+  --text-primary: #2C2623;
+  --text-secondary: #655C56;
+  --text-muted: #8E847C;
+  --surface: #FFFFFF;
+  --surface-card: #FAF4EB;
+  --surface-hover: #F5EBDC;
+  --border: #E2D3B8;
+  --border-focus: #CCA470;
+
+  /* Status & Indicator Colors */
+  --success: #2E7D32;
+  --success-bg: #E8F5E9;
+  --warning: #ED6C02;
+  --warning-bg: #FFF4E5;
+  --danger: #D32F2F;
+  --danger-bg: #FFEBEE;
+  --info: #0288D1;
+  --info-bg: #E1F5FE;
+
+  /* Overdue Specific Color */
+  --overdue-badge-bg: #FFE5E5;
+  --overdue-badge-text: #C62828;
+  --overdue-border: #FFCDD2;
+
+  /* Layout & Spacing */
+  --sidebar-width: 260px;
+  --header-height: 64px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(44, 38, 35, 0.06);
+  --shadow-md: 0 4px 12px rgba(44, 38, 35, 0.08);
+  --shadow-lg: 0 10px 25px rgba(44, 38, 35, 0.12);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
