@@ -10,6 +10,7 @@ import {
   FiSearch,
   FiCheckCircle,
   FiAlertTriangle,
+  FiEye,
 } from 'react-icons/fi';
 import {
   getProjectByIdApi,
@@ -26,6 +27,7 @@ import {
   deleteTaskApi,
 } from '../../services/api/tasks';
 import { useToast } from '../../context/ToastContext';
+import { PageHeader } from '../../components/common/PageHeader';
 import { ProgressBar } from '../../components/common/ProgressBar';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { Button } from '../../components/common/Button';
@@ -37,6 +39,7 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { Avatar } from '../../components/common/Avatar';
 import { ProjectModal } from '../../components/projects/ProjectModal';
 import { TaskModal } from '../../components/tasks/TaskModal';
+import { TaskPreviewModal } from '../../components/tasks/TaskPreviewModal';
 import { MemberModal } from '../../components/projects/MemberModal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 
@@ -63,6 +66,7 @@ export default function ProjectDetails() {
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [previewTask, setPreviewTask] = useState(null);
 
   // Confirm dialogs
   const [deletingTaskId, setDeletingTaskId] = useState(null);
@@ -215,6 +219,9 @@ export default function ProjectDetails() {
       const res = await updateTaskStatusApi(taskId, newStatus);
       if (res.success) {
         showToast('Task status updated', 'success');
+        if (previewTask && previewTask._id === taskId) {
+          setPreviewTask({ ...previewTask, status: newStatus });
+        }
         fetchTasks(taskPagination.page);
         fetchProjectDetails();
       }
@@ -265,41 +272,41 @@ export default function ProjectDetails() {
 
   return (
     <div className="animate-page-entrance">
-      {/* Project Banner & Details */}
-      <div className="project-details-header">
-        <div className="project-details-title-row">
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
-              <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>{project.name}</h1>
-              {isOwner ? (
-                <span className="badge badge-owner">Owner</span>
-              ) : (
-                <span className="badge badge-member">Member</span>
-              )}
-            </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-base)', maxWidth: '800px' }}>
-              {project.description || 'No description provided.'}
-            </p>
-            <div style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-              Start Date: {new Date(project.startDate).toLocaleDateString()} • Created by {project.createdBy?.name || 'Owner'}
-            </div>
+      <PageHeader
+        title={project.name}
+        subtitle="Manage tasks, members, and progress for this project."
+        action={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            {isOwner ? (
+              <span className="badge badge-owner">Owner</span>
+            ) : (
+              <span className="badge badge-member">Member</span>
+            )}
+            {isOwner && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => setIsEditProjectOpen(true)} style={{ gap: '0.4rem' }}>
+                  <FiEdit3 />
+                  <span>Edit</span>
+                </Button>
+                <Button variant="danger" size="sm" onClick={() => setIsDeleteProjectOpen(true)} style={{ gap: '0.4rem' }}>
+                  <FiTrash2 />
+                  <span>Delete</span>
+                </Button>
+              </>
+            )}
           </div>
+        }
+      />
 
-          {isOwner && (
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <Button variant="outline" size="sm" onClick={() => setIsEditProjectOpen(true)} style={{ gap: '0.4rem' }}>
-                <FiEdit3 />
-                <span>Edit</span>
-              </Button>
-              <Button variant="danger" size="sm" onClick={() => setIsDeleteProjectOpen(true)} style={{ gap: '0.4rem' }}>
-                <FiTrash2 />
-                <span>Delete</span>
-              </Button>
-            </div>
-          )}
+      {/* Project Overview Card */}
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-base)', marginBottom: '0.75rem', lineHeight: 1.5 }}>
+          {project.description || 'No description provided.'}
+        </p>
+        <div style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+          Start Date: {new Date(project.startDate).toLocaleDateString()} • Created by {project.createdBy?.name || 'Owner'}
         </div>
 
-        {/* Progress & Task Metrics Bar */}
         <div
           style={{
             display: 'grid',
@@ -309,7 +316,6 @@ export default function ProjectDetails() {
             padding: '1.2rem',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border)',
-            marginTop: '1.25rem',
           }}
         >
           <div>
@@ -486,6 +492,15 @@ export default function ProjectDetails() {
                   </div>
 
                   <div className="task-actions">
+                    <button
+                      className="btn-icon"
+                      onClick={() => setPreviewTask(task)}
+                      title="Preview Task & Members"
+                      style={{ color: 'var(--rose-deep)' }}
+                    >
+                      <FiEye />
+                    </button>
+
                     <select
                       className="form-select"
                       style={{ padding: '0.35rem 0.6rem', fontSize: 'var(--font-xs)', width: 'auto' }}
@@ -524,6 +539,18 @@ export default function ProjectDetails() {
       </div>
 
       {/* Modals & Confirmation Dialogs */}
+      <TaskPreviewModal
+        isOpen={!!previewTask}
+        onClose={() => setPreviewTask(null)}
+        task={previewTask}
+        onEdit={(t) => {
+          setEditingTask(t);
+          setIsTaskModalOpen(true);
+        }}
+        onStatusChange={handleStatusChange}
+        isOwner={isOwner}
+      />
+
       <ProjectModal
         isOpen={isEditProjectOpen}
         onClose={() => setIsEditProjectOpen(false)}

@@ -5,6 +5,7 @@ import { getProjectsApi } from '../../services/api/projects';
 import { ProgressBar } from '../../components/common/ProgressBar';
 import { Skeleton } from '../../components/common/Skeleton';
 import { ErrorState } from '../../components/common/ErrorState';
+import { PageHeader } from '../../components/common/PageHeader';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Dashboard() {
@@ -40,12 +41,10 @@ export default function Dashboard() {
 
   return (
     <div className="animate-page-entrance">
-      <div className="dashboard-header">
-        <h1 className="dashboard-title">Welcome back, {user?.name}!</h1>
-        <p className="dashboard-subtitle">
-          Here is an overview of your projects, tasks, and progress.
-        </p>
-      </div>
+      <PageHeader
+        title={`Welcome back, ${user?.name || 'Shashidhara'}!`}
+        subtitle="Here's an overview of your projects, tasks, and progress."
+      />
 
       {loading ? (
         <div>

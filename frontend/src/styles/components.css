@@ -1,3 +1,79 @@
+/* PageHeader Component Styles */
+.page-header-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.25rem;
+  flex-wrap: wrap;
+  animation: slideUp 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.page-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.page-header-accent-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--pink-500);
+  box-shadow: 0 0 0 3px var(--pink-100);
+  flex-shrink: 0;
+}
+
+.page-header-title {
+  font-size: 32px;
+  font-weight: 750;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.page-header-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 0.1rem;
+}
+
+.page-header-action {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .page-header-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-header-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .page-header-title {
+    font-size: 24px;
+  }
+  .page-header-subtitle {
+    font-size: 14px;
+  }
+  .page-header-action {
+    width: 100%;
+  }
+}
+
 /* Cards */
 .card {
   background-color: #FFFFFF;

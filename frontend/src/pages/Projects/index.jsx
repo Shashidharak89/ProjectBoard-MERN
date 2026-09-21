@@ -4,6 +4,7 @@ import { FiPlus, FiFolder } from 'react-icons/fi';
 import { getProjectsApi, createProjectApi } from '../../services/api/projects';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
+import { PageHeader } from '../../components/common/PageHeader';
 import { SearchInput } from '../../components/common/SearchInput';
 import { Pagination } from '../../components/common/Pagination';
 import { ProgressBar } from '../../components/common/ProgressBar';
@@ -71,26 +72,23 @@ export default function Projects() {
 
   return (
     <div className="animate-page-entrance">
-      <div className="projects-header">
-        <div>
-          <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>Projects</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-sm)' }}>
-            Manage and view projects you own or contribute to.
-          </p>
-        </div>
-
-        <div className="projects-actions">
-          <SearchInput
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Search projects..."
-          />
-          <Button variant="primary" onClick={() => setIsCreateModalOpen(true)} style={{ gap: '0.4rem' }}>
-            <FiPlus />
-            <span>Create Project</span>
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Projects"
+        subtitle="Manage and track all your projects in one place."
+        action={
+          <>
+            <SearchInput
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Search projects..."
+            />
+            <Button variant="primary" onClick={() => setIsCreateModalOpen(true)} style={{ gap: '0.4rem' }}>
+              <FiPlus />
+              <span>New Project</span>
+            </Button>
+          </>
+        }
+      />
 
       {loading ? (
         <div className="projects-grid">

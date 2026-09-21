@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { PageHeader } from '../../components/common/PageHeader';
 import { Input } from '../../components/common/Input';
 import { Button } from '../../components/common/Button';
 import { Avatar } from '../../components/common/Avatar';
@@ -42,13 +43,11 @@ export default function Profile() {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>Account Settings</h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-          View and update your personal profile information.
-        </p>
-      </div>
+    <div className="animate-page-entrance" style={{ maxWidth: '680px', margin: '0 auto' }}>
+      <PageHeader
+        title="Profile"
+        subtitle="Manage your account information and preferences."
+      />
 
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid var(--border)' }}>
