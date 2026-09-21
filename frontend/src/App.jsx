@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import ProjectDetails from './pages/ProjectDetails';
+import Users from './pages/Users';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
@@ -100,6 +101,7 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/:projectId" element={<ProjectDetails />} />
+              <Route path="/users" element={<Users />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
 

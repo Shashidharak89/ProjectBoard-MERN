@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FiGrid, FiFolder, FiUser, FiLogOut, FiX } from 'react-icons/fi';
+import { FiGrid, FiFolder, FiUsers, FiUser, FiLogOut, FiX } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../common/Button';
 
@@ -10,6 +10,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
   const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <FiGrid /> },
     { label: 'Projects', path: '/projects', icon: <FiFolder /> },
+    { label: 'Users', path: '/users', icon: <FiUsers /> },
     { label: 'Profile', path: '/profile', icon: <FiUser /> },
   ];
 
