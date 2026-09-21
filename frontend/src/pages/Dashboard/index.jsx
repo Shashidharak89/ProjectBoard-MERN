@@ -39,7 +39,7 @@ export default function Dashboard() {
   const pendingTasks = totalTasks - completedTasks;
 
   return (
-    <div>
+    <div className="animate-page-entrance">
       <div className="dashboard-header">
         <h1 className="dashboard-title">Welcome back, {user?.name}!</h1>
         <p className="dashboard-subtitle">
@@ -61,7 +61,7 @@ export default function Dashboard() {
           {/* Key Metrics Grid */}
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--light-accent)' }}>
+              <div className="stat-icon-wrapper stat-icon-total-projects">
                 <FiFolder />
               </div>
               <div>
@@ -71,7 +71,7 @@ export default function Dashboard() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--warning-bg)', color: 'var(--warning)' }}>
+              <div className="stat-icon-wrapper stat-icon-active-projects">
                 <FiZap />
               </div>
               <div>
@@ -81,7 +81,7 @@ export default function Dashboard() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--info-bg)', color: 'var(--info)' }}>
+              <div className="stat-icon-wrapper stat-icon-total-tasks">
                 <FiCheckSquare />
               </div>
               <div>
@@ -91,7 +91,7 @@ export default function Dashboard() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--success-bg)', color: 'var(--success)' }}>
+              <div className="stat-icon-wrapper stat-icon-completed-tasks">
                 <FiCheckCircle />
               </div>
               <div>
@@ -105,10 +105,10 @@ export default function Dashboard() {
           <div className="dashboard-sections-grid">
             <div className="card">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--rose-deep)' }}>
                   Recent Projects & Progress
                 </h3>
-                <Link to="/projects" style={{ fontSize: 'var(--font-sm)', color: 'var(--accent)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                <Link to="/projects" style={{ fontSize: 'var(--font-sm)', color: 'var(--pink-700)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                   <span>View All</span>
                   <FiArrowRight />
                 </Link>
@@ -129,7 +129,7 @@ export default function Dashboard() {
                       key={project._id}
                       style={{
                         padding: '1rem',
-                        backgroundColor: 'var(--surface)',
+                        backgroundColor: '#FFFFFF',
                         borderRadius: 'var(--radius-md)',
                         border: '1px solid var(--border)',
                       }}
@@ -146,7 +146,7 @@ export default function Dashboard() {
                             {project.completedTasks || 0} / {project.totalTasks || 0} tasks completed
                           </div>
                         </div>
-                        <span style={{ fontSize: 'var(--font-xs)', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                        <span style={{ fontSize: 'var(--font-xs)', fontWeight: 600, color: 'var(--text-muted)' }}>
                           {project.createdBy?.name ? `Owner: ${project.createdBy.name}` : ''}
                         </span>
                       </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
             {/* Quick Actions & Overview */}
             <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.25rem' }}>
+                <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--rose-deep)', marginBottom: '1.25rem' }}>
                   Quick Project Overview
                 </h3>
 
@@ -171,7 +171,7 @@ export default function Dashboard() {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '0.85rem 1rem',
-                      backgroundColor: 'var(--surface)',
+                      backgroundColor: 'var(--pink-50)',
                       borderRadius: 'var(--radius-md)',
                       border: '1px solid var(--border)',
                     }}
@@ -186,7 +186,7 @@ export default function Dashboard() {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '0.85rem 1rem',
-                      backgroundColor: 'var(--surface)',
+                      backgroundColor: 'var(--pink-50)',
                       borderRadius: 'var(--radius-md)',
                       border: '1px solid var(--border)',
                     }}

@@ -1,48 +1,61 @@
 :root {
-  /* Brand Color Palette */
-  --primary: #E5A2A9;
-  --primary-hover: #D88E96;
-  --secondary: #EFbbc1;
-  --secondary-hover: #E3A3A9;
+  /* ProjectFlow Pink Palette */
+  --pink-50:  #FFF7F8;
+  --pink-100: #FDECEF;
+  --pink-200: #F8D9DF;
+  --pink-300: #F3C1CA;
+  --pink-400: #E9A0AC;
+  --pink-500: #E58F9D;
+  --pink-600: #D97788;
+  --pink-700: #C65F70;
+  --pink-800: #A94D5E;
 
-  /* Swapped Background & Surface Colors (Lighter body background, Warm Cream surface/header) */
-  --background: #FCFBF8;
-  --surface: #F2E4CA;
-  --surface-card: #FAF2E3;
-  --surface-hover: #F2E4CD;
-  --light-accent: #FCC9D2;
-  --accent: #CCA470;
-  --accent-hover: #B8905B;
+  --rose-deep: #713D49;
 
-  /* Neutral & Text Colors */
-  --text-primary: #2C2623;
-  --text-secondary: #655C56;
-  --text-muted: #8E847C;
-  --border: #E2D3B8;
-  --border-focus: #CCA470;
+  /* Surface & Background Colors */
+  --background: #FFF7F8;
+  --surface: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-pink: #FFF0F3;
+  --surface-hover: #FDECEF;
 
-  /* Status & Indicator Colors */
-  --success: #2E7D32;
-  --success-bg: #E8F5E9;
-  --warning: #ED6C02;
-  --warning-bg: #FFF4E5;
-  --danger: #D32F2F;
-  --danger-bg: #FFEBEE;
-  --info: #0288D1;
-  --info-bg: #E1F5FE;
+  /* Typography Colors */
+  --text-primary: #35282B;
+  --text-secondary: #725E63;
+  --text-muted: #967F84;
+
+  /* Borders & Dividers */
+  --border: #F0D5DA;
+  --border-focus: #E9A0AC;
+
+  /* Semantic Colors */
+  --success: #4F8A68;
+  --success-bg: #EDF7F0;
+  --warning: #C98235;
+  --warning-bg: #FFF5EA;
+  --danger: #C85B68;
+  --danger-bg: #FFF0F1;
+  --info: #4F80AA;
+  --info-bg: #F0F6FA;
 
   /* Overdue Specific Color */
-  --overdue-badge-bg: #FFE5E5;
-  --overdue-badge-text: #C62828;
-  --overdue-border: #FFCDD2;
+  --overdue-badge-bg: #FFF0F1;
+  --overdue-badge-text: #C85B68;
+  --overdue-border: #F8D9DF;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(113, 61, 73, 0.06);
+  --shadow-md: 0 8px 24px rgba(113, 61, 73, 0.08);
+  --shadow-lg: 0 16px 40px rgba(113, 61, 73, 0.12);
 
   /* Layout & Spacing */
   --sidebar-width: 280px;
   --header-height: 68px;
   --footer-height: 60px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
   /* Fluid Responsive Typography */
@@ -53,12 +66,7 @@
   --font-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
   --font-2xl: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(44, 38, 35, 0.06);
-  --shadow-md: 0 4px 12px rgba(44, 38, 35, 0.08);
-  --shadow-lg: 0 10px 25px rgba(44, 38, 35, 0.12);
-
   /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 160ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }

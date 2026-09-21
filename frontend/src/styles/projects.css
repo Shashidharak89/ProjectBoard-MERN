@@ -24,6 +24,18 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 220px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--pink-400);
+  border-radius: var(--radius-lg);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--pink-300);
+  border-left-color: var(--pink-600);
 }
 
 .project-card-header {
@@ -34,14 +46,19 @@
 }
 
 .project-title {
-  font-size: 1.2rem;
+  font-size: var(--font-lg);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
+  transition: color var(--transition-fast);
+}
+
+.project-title:hover {
+  color: var(--pink-700);
 }
 
 .project-desc {
-  font-size: 0.88rem;
+  font-size: var(--font-sm);
   color: var(--text-secondary);
   line-clamp: 2;
   display: -webkit-box;
@@ -58,16 +75,17 @@
   margin-top: 1rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--border);
-  font-size: 0.82rem;
+  font-size: var(--font-xs);
   color: var(--text-secondary);
 }
 
 .project-details-header {
-  background-color: var(--surface-card);
+  background-color: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
   margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .project-details-title-row {
