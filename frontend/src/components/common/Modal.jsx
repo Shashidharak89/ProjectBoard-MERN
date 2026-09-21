@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { FiX } from 'react-icons/fi';
 
 export const Modal = ({ isOpen, onClose, title, children, footer }) => {
   useEffect(() => {
@@ -19,7 +20,7 @@ export const Modal = ({ isOpen, onClose, title, children, footer }) => {
         <div className="modal-header">
           <h3 className="modal-title">{title}</h3>
           <button className="modal-close-btn" onClick={onClose} aria-label="Close Modal">
-            ✕
+            <FiX />
           </button>
         </div>
         <div className="modal-body">{children}</div>

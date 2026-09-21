@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import { Button } from './Button';
 
 export const ErrorState = ({
@@ -15,12 +16,15 @@ export const ErrorState = ({
       textAlign: 'center',
       margin: '1.5rem 0',
     }}>
-      <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚠️</div>
-      <h4 style={{ color: 'var(--danger)', fontWeight: 700, marginBottom: '0.4rem' }}>{title}</h4>
-      <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: onRetry ? '1rem' : 0 }}>{message}</p>
+      <div style={{ fontSize: '2.2rem', color: 'var(--danger)', marginBottom: '0.5rem', display: 'flex', justifyContent: 'center' }}>
+        <FiAlertCircle />
+      </div>
+      <h4 style={{ color: 'var(--danger)', fontWeight: 700, marginBottom: '0.4rem', fontSize: 'var(--font-lg)' }}>{title}</h4>
+      <p style={{ fontSize: 'var(--font-sm)', color: 'var(--text-secondary)', marginBottom: onRetry ? '1rem' : 0 }}>{message}</p>
       {onRetry && (
-        <Button variant="outline" size="sm" onClick={onRetry}>
-          🔄 Try Again
+        <Button variant="outline" size="sm" onClick={onRetry} style={{ gap: '0.4rem' }}>
+          <FiRefreshCw />
+          <span>Try Again</span>
         </Button>
       )}
     </div>

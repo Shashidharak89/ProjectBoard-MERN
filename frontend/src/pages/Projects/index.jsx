@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { FiPlus, FiFolder } from 'react-icons/fi';
 import { getProjectsApi, createProjectApi } from '../../services/api/projects';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
@@ -44,7 +45,7 @@ export default function Projects() {
 
   useEffect(() => {
     fetchProjects(1, search);
-  }, [search]);
+  }, [search, fetchProjects]);
 
   const handleSearchChange = (newSearch) => {
     setSearch(newSearch);
@@ -74,8 +75,8 @@ export default function Projects() {
     <div>
       <div className="projects-header">
         <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>Projects</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+          <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>Projects</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-sm)' }}>
             Manage and view projects you own or contribute to.
           </p>
         </div>
@@ -86,8 +87,9 @@ export default function Projects() {
             onChange={handleSearchChange}
             placeholder="Search projects..."
           />
-          <Button variant="primary" onClick={() => setIsCreateModalOpen(true)}>
-            + Create Project
+          <Button variant="primary" onClick={() => setIsCreateModalOpen(true)} style={{ gap: '0.4rem' }}>
+            <FiPlus />
+            <span>Create Project</span>
           </Button>
         </div>
       </div>
@@ -100,14 +102,14 @@ export default function Projects() {
         <ErrorState message={error} onRetry={() => fetchProjects(pagination.page, search)} />
       ) : projects.length === 0 ? (
         <EmptyState
-          icon="📁"
+          icon={<FiFolder />}
           title={search ? 'No projects match your search' : 'No projects found'}
           description={
             search
               ? `No projects found matching "${search}". Try clearing your search term.`
               : 'You have not created or joined any projects yet.'
           }
-          actionLabel={search ? 'Clear Search' : '+ Create First Project'}
+          actionLabel={search ? 'Clear Search' : 'Create First Project'}
           onAction={search ? () => setSearch('') : () => setIsCreateModalOpen(true)}
         />
       ) : (

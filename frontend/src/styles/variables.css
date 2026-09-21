@@ -35,12 +35,20 @@
   --overdue-border: #FFCDD2;
 
   /* Layout & Spacing */
-  --sidebar-width: 260px;
-  --header-height: 64px;
+  --sidebar-width: 280px;
+  --header-height: 68px;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
   --radius-full: 9999px;
+
+  /* Fluid Responsive Typography */
+  --font-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+  --font-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+  --font-base: clamp(0.875rem, 0.825rem + 0.35vw, 1rem);
+  --font-lg: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
+  --font-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --font-2xl: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(44, 38, 35, 0.06);

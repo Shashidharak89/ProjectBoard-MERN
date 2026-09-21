@@ -1,5 +1,5 @@
 export const BRANDING = {
-  name: 'ProjectFlow',
-  tagline: 'Plan. Assign. Track. Complete.',
+  name: 'ProjectBoard',
+  logo: '/projectboard-logo.png',
   version: '1.0.0',
 };

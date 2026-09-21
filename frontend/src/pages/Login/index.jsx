@@ -28,7 +28,7 @@ export default function Login() {
 
     try {
       await login(email, password);
-      showToast('Welcome back to ProjectFlow!', 'success');
+      showToast('Welcome back to ProjectBoard!', 'success');
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Invalid email or password');
@@ -60,13 +60,17 @@ export default function Login() {
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
-            <span style={{ color: 'var(--accent)' }}>❖</span> {BRANDING.name}
+          <img
+            src={BRANDING.logo}
+            alt={BRANDING.name}
+            style={{ height: '56px', width: 'auto', marginBottom: '0.75rem', objectFit: 'contain' }}
+          />
+          <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>
+            {BRANDING.name}
           </h1>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{BRANDING.tagline}</p>
         </div>
 
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>
           Sign In to Your Account
         </h2>
 
@@ -77,7 +81,7 @@ export default function Login() {
               backgroundColor: 'var(--danger-bg)',
               color: 'var(--danger)',
               borderRadius: 'var(--radius-md)',
-              fontSize: '0.88rem',
+              fontSize: 'var(--font-sm)',
               marginBottom: '1.25rem',
               textAlign: 'center',
             }}
@@ -110,7 +114,7 @@ export default function Login() {
           </Button>
         </form>
 
-        <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
+        <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
           Don't have an account?{' '}
           <Link to="/register" style={{ color: 'var(--accent)', fontWeight: 700 }}>
             Register here

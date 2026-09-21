@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FiFolder, FiZap, FiCheckSquare, FiCheckCircle, FiPlus, FiArrowRight } from 'react-icons/fi';
 import { getProjectsApi } from '../../services/api/projects';
 import { ProgressBar } from '../../components/common/ProgressBar';
-import { StatusBadge } from '../../components/common/StatusBadge';
 import { Skeleton } from '../../components/common/Skeleton';
 import { ErrorState } from '../../components/common/ErrorState';
-import { Avatar } from '../../components/common/Avatar';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Dashboard() {
@@ -33,7 +32,6 @@ export default function Dashboard() {
     fetchDashboardData();
   }, []);
 
-  // Compute overall stats across all user projects
   const totalProjects = projects.length;
   const activeProjects = projects.filter((p) => p.progress < 100).length;
   const totalTasks = projects.reduce((acc, p) => acc + (p.totalTasks || 0), 0);
@@ -43,7 +41,7 @@ export default function Dashboard() {
   return (
     <div>
       <div className="dashboard-header">
-        <h1 className="dashboard-title">Welcome back, {user?.name}! 👋</h1>
+        <h1 className="dashboard-title">Welcome back, {user?.name}!</h1>
         <p className="dashboard-subtitle">
           Here is an overview of your projects, tasks, and progress.
         </p>
@@ -64,7 +62,7 @@ export default function Dashboard() {
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--light-accent)' }}>
-                📁
+                <FiFolder />
               </div>
               <div>
                 <div className="stat-val">{totalProjects}</div>
@@ -74,7 +72,7 @@ export default function Dashboard() {
 
             <div className="stat-card">
               <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--warning-bg)', color: 'var(--warning)' }}>
-                ⚡
+                <FiZap />
               </div>
               <div>
                 <div className="stat-val">{activeProjects}</div>
@@ -84,7 +82,7 @@ export default function Dashboard() {
 
             <div className="stat-card">
               <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--info-bg)', color: 'var(--info)' }}>
-                📋
+                <FiCheckSquare />
               </div>
               <div>
                 <div className="stat-val">{totalTasks}</div>
@@ -94,7 +92,7 @@ export default function Dashboard() {
 
             <div className="stat-card">
               <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--success-bg)', color: 'var(--success)' }}>
-                ✓
+                <FiCheckCircle />
               </div>
               <div>
                 <div className="stat-val">{completedTasks}</div>
@@ -107,19 +105,21 @@ export default function Dashboard() {
           <div className="dashboard-sections-grid">
             <div className="card">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--text-primary)' }}>
                   Recent Projects & Progress
                 </h3>
-                <Link to="/projects" style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>
-                  View All →
+                <Link to="/projects" style={{ fontSize: 'var(--font-sm)', color: 'var(--accent)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>View All</span>
+                  <FiArrowRight />
                 </Link>
               </div>
 
               {projects.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-secondary)' }}>
                   <p style={{ marginBottom: '1rem' }}>No projects created yet.</p>
-                  <Link to="/projects" className="btn btn-primary btn-sm">
-                    + Create First Project
+                  <Link to="/projects" className="btn btn-primary btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <FiPlus />
+                    <span>Create First Project</span>
                   </Link>
                 </div>
               ) : (
@@ -138,15 +138,15 @@ export default function Dashboard() {
                         <div>
                           <Link
                             to={`/projects/${project._id}`}
-                            style={{ fontWeight: 700, fontSize: '0.98rem', color: 'var(--text-primary)' }}
+                            style={{ fontWeight: 700, fontSize: 'var(--font-base)', color: 'var(--text-primary)' }}
                           >
                             {project.name}
                           </Link>
-                          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                          <div style={{ fontSize: 'var(--font-xs)', color: 'var(--text-secondary)' }}>
                             {project.completedTasks || 0} / {project.totalTasks || 0} tasks completed
                           </div>
                         </div>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                        <span style={{ fontSize: 'var(--font-xs)', fontWeight: 600, color: 'var(--text-secondary)' }}>
                           {project.createdBy?.name ? `Owner: ${project.createdBy.name}` : ''}
                         </span>
                       </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
             {/* Quick Actions & Overview */}
             <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.25rem' }}>
+                <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.25rem' }}>
                   Quick Project Overview
                 </h3>
 
@@ -176,8 +176,8 @@ export default function Dashboard() {
                       border: '1px solid var(--border)',
                     }}
                   >
-                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Pending Tasks</span>
-                    <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--warning)' }}>{pendingTasks}</span>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>Pending Tasks</span>
+                    <span style={{ fontWeight: 800, fontSize: 'var(--font-lg)', color: 'var(--warning)' }}>{pendingTasks}</span>
                   </div>
 
                   <div
@@ -191,8 +191,8 @@ export default function Dashboard() {
                       border: '1px solid var(--border)',
                     }}
                   >
-                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Overall Completion</span>
-                    <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--success)' }}>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>Overall Completion</span>
+                    <span style={{ fontWeight: 800, fontSize: 'var(--font-lg)', color: 'var(--success)' }}>
                       {totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0}%
                     </span>
                   </div>
@@ -200,8 +200,9 @@ export default function Dashboard() {
               </div>
 
               <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
-                <Link to="/projects" className="btn btn-primary" style={{ width: '100%' }}>
-                  🚀 Go to Projects Workspace
+                <Link to="/projects" className="btn btn-primary" style={{ width: '100%', gap: '0.5rem' }}>
+                  <FiFolder />
+                  <span>Go to Projects Workspace</span>
                 </Link>
               </div>
             </div>

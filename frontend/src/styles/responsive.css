@@ -5,22 +5,12 @@
 }
 
 @media (max-width: 768px) {
-  .mobile-menu-toggle {
-    display: block;
+  .header {
+    padding: 0 1rem;
   }
 
-  .sidebar {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    bottom: 0;
-    z-index: 500;
-    transform: translateX(-100%);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
+  .brand-logo-img {
+    height: 30px;
   }
 
   .projects-header, .task-filters-bar {

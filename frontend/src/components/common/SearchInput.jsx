@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FiSearch, FiX } from 'react-icons/fi';
 
 export const SearchInput = ({
   value: externalValue = '',
@@ -29,8 +30,8 @@ export const SearchInput = ({
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%', maxWidth: '360px' }}>
-      <span style={{ position: 'absolute', left: '12px', color: 'var(--text-secondary)', fontSize: '0.9rem', pointerEvents: 'none' }}>
-        🔍
+      <span style={{ position: 'absolute', left: '12px', color: 'var(--text-secondary)', fontSize: '0.95rem', pointerEvents: 'none', display: 'flex', alignItems: 'center' }}>
+        <FiSearch />
       </span>
       <input
         type="text"
@@ -43,10 +44,10 @@ export const SearchInput = ({
       {searchTerm && (
         <button
           onClick={handleClear}
-          style={{ position: 'absolute', right: '10px', color: 'var(--text-secondary)', fontSize: '0.9rem', padding: '2px 4px' }}
+          style={{ position: 'absolute', right: '10px', color: 'var(--text-secondary)', fontSize: '0.9rem', padding: '2px 4px', display: 'flex', alignItems: 'center' }}
           title="Clear search"
         >
-          ✕
+          <FiX />
         </button>
       )}
     </div>

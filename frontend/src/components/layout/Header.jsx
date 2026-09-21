@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiMenu } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../common/Avatar';
 import { BRANDING } from '../../constants/branding';
@@ -9,18 +10,13 @@ export const Header = ({ onToggleSidebar }) => {
   return (
     <header className="header">
       <div className="header-left">
-        <button
-          className="mobile-menu-toggle"
-          onClick={onToggleSidebar}
-          aria-label="Toggle navigation menu"
-        >
-          ☰
-        </button>
-        <div>
-          <div className="brand-title">
-            <span style={{ color: 'var(--accent)' }}>❖</span> {BRANDING.name}
-          </div>
-          <div className="brand-tagline">{BRANDING.tagline}</div>
+        <img
+          src={BRANDING.logo}
+          alt={BRANDING.name}
+          className="brand-logo-img"
+        />
+        <div className="brand-title">
+          {BRANDING.name}
         </div>
       </div>
 
@@ -38,6 +34,15 @@ export const Header = ({ onToggleSidebar }) => {
             </div>
           </div>
         )}
+
+        <button
+          className="hamburger-toggle-btn"
+          onClick={onToggleSidebar}
+          aria-label="Toggle navigation drawer"
+          title="Open menu"
+        >
+          <FiMenu />
+        </button>
       </div>
     </header>
   );

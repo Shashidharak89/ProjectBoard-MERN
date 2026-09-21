@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
+  FiEdit3,
+  FiTrash2,
+  FiPlus,
+  FiUserPlus,
+  FiX,
+  FiClock,
+  FiSearch,
+  FiCheckCircle,
+  FiAlertTriangle,
+} from 'react-icons/fi';
+import {
   getProjectByIdApi,
   updateProjectApi,
   deleteProjectApi,
@@ -14,7 +25,6 @@ import {
   updateTaskStatusApi,
   deleteTaskApi,
 } from '../../services/api/tasks';
-import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { ProgressBar } from '../../components/common/ProgressBar';
 import { StatusBadge } from '../../components/common/StatusBadge';
@@ -33,7 +43,6 @@ import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 export default function ProjectDetails() {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const { showToast } = useToast();
 
   const [project, setProject] = useState(null);
@@ -261,24 +270,26 @@ export default function ProjectDetails() {
         <div className="project-details-title-row">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
-              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>{project.name}</h1>
+              <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>{project.name}</h1>
               {isOwner && <span className="badge badge-default" style={{ backgroundColor: 'var(--accent)', color: '#fff' }}>Owner</span>}
             </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', maxWidth: '800px' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-base)', maxWidth: '800px' }}>
               {project.description || 'No description provided.'}
             </p>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            <div style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
               Start Date: {new Date(project.startDate).toLocaleDateString()} • Created by {project.createdBy?.name || 'Owner'}
             </div>
           </div>
 
           {isOwner && (
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <Button variant="outline" size="sm" onClick={() => setIsEditProjectOpen(true)}>
-                ✏️ Edit Project
+              <Button variant="outline" size="sm" onClick={() => setIsEditProjectOpen(true)} style={{ gap: '0.4rem' }}>
+                <FiEdit3 />
+                <span>Edit</span>
               </Button>
-              <Button variant="danger" size="sm" onClick={() => setIsDeleteProjectOpen(true)}>
-                🗑️ Delete Project
+              <Button variant="danger" size="sm" onClick={() => setIsDeleteProjectOpen(true)} style={{ gap: '0.4rem' }}>
+                <FiTrash2 />
+                <span>Delete</span>
               </Button>
             </div>
           )}
@@ -298,16 +309,16 @@ export default function ProjectDetails() {
           }}
         >
           <div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>TOTAL TASKS</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>{project.totalTasks || 0}</div>
+            <div style={{ fontSize: 'var(--font-xs)', color: 'var(--text-secondary)', fontWeight: 600 }}>TOTAL TASKS</div>
+            <div style={{ fontSize: 'var(--font-xl)', fontWeight: 800 }}>{project.totalTasks || 0}</div>
           </div>
           <div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--success)', fontWeight: 600 }}>COMPLETED</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--success)' }}>{project.completedTasks || 0}</div>
+            <div style={{ fontSize: 'var(--font-xs)', color: 'var(--success)', fontWeight: 600 }}>COMPLETED</div>
+            <div style={{ fontSize: 'var(--font-xl)', fontWeight: 800, color: 'var(--success)' }}>{project.completedTasks || 0}</div>
           </div>
           <div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--warning)', fontWeight: 600 }}>PENDING</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--warning)' }}>{project.pendingTasks || 0}</div>
+            <div style={{ fontSize: 'var(--font-xs)', color: 'var(--warning)', fontWeight: 600 }}>PENDING</div>
+            <div style={{ fontSize: 'var(--font-xl)', fontWeight: 800, color: 'var(--warning)' }}>{project.pendingTasks || 0}</div>
           </div>
           <div style={{ gridColumn: 'span 2' }}>
             <ProgressBar progress={project.progress || 0} />
@@ -318,10 +329,11 @@ export default function ProjectDetails() {
       {/* Members Section */}
       <div className="card" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Project Members ({(project.members || []).length})</h3>
+          <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700 }}>Project Members ({(project.members || []).length})</h3>
           {isOwner && (
-            <Button variant="secondary" size="sm" onClick={() => setIsAddMemberOpen(true)}>
-              + Add Member
+            <Button variant="secondary" size="sm" onClick={() => setIsAddMemberOpen(true)} style={{ gap: '0.4rem' }}>
+              <FiUserPlus />
+              <span>Add Member</span>
             </Button>
           )}
         </div>
@@ -342,20 +354,20 @@ export default function ProjectDetails() {
                   backgroundColor: 'var(--surface)',
                   borderRadius: 'var(--radius-full)',
                   border: '1px solid var(--border)',
-                  fontSize: '0.85rem',
+                  fontSize: 'var(--font-sm)',
                   fontWeight: 600,
                 }}
               >
                 <Avatar name={member.name || 'User'} size={26} />
                 <span>{member.name || 'User'}</span>
-                {isProjectOwner && <span style={{ fontSize: '0.7rem', color: 'var(--accent)' }}>(Owner)</span>}
+                {isProjectOwner && <span style={{ fontSize: 'var(--font-xs)', color: 'var(--accent)' }}>(Owner)</span>}
                 {isOwner && !isProjectOwner && (
                   <button
                     onClick={() => setRemovingMemberId(memberId)}
-                    style={{ color: 'var(--danger)', fontSize: '0.8rem', marginLeft: '0.3rem' }}
+                    style={{ color: 'var(--danger)', fontSize: '0.9rem', marginLeft: '0.3rem', display: 'flex', alignItems: 'center' }}
                     title="Remove member"
                   >
-                    ✕
+                    <FiX />
                   </button>
                 )}
               </div>
@@ -368,7 +380,7 @@ export default function ProjectDetails() {
       <div>
         <div className="task-filters-bar">
           <div>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800 }}>Tasks</h2>
+            <h2 style={{ fontSize: 'var(--font-xl)', fontWeight: 800 }}>Tasks</h2>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -378,8 +390,9 @@ export default function ProjectDetails() {
               placeholder="Search tasks..."
             />
 
-            <Button variant="primary" onClick={() => { setEditingTask(null); setIsTaskModalOpen(true); }}>
-              + Create Task
+            <Button variant="primary" onClick={() => { setEditingTask(null); setIsTaskModalOpen(true); }} style={{ gap: '0.4rem' }}>
+              <FiPlus />
+              <span>Create Task</span>
             </Button>
           </div>
         </div>
@@ -395,27 +408,30 @@ export default function ProjectDetails() {
           <button
             className={`filter-pill ${taskStatusFilter === 'in-progress' && !overdueFilter ? 'active' : ''}`}
             onClick={() => { setTaskStatusFilter('in-progress'); setOverdueFilter(false); }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
           >
-            ⏳ In Progress
+            <FiClock /> In Progress
           </button>
           <button
             className={`filter-pill ${taskStatusFilter === 'review' && !overdueFilter ? 'active' : ''}`}
             onClick={() => { setTaskStatusFilter('review'); setOverdueFilter(false); }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
           >
-            🔍 Review
+            <FiSearch /> Review
           </button>
           <button
             className={`filter-pill ${taskStatusFilter === 'completed' && !overdueFilter ? 'active' : ''}`}
             onClick={() => { setTaskStatusFilter('completed'); setOverdueFilter(false); }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
           >
-            ✓ Completed
+            <FiCheckCircle /> Completed
           </button>
           <button
             className={`filter-pill ${overdueFilter ? 'active' : ''}`}
-            style={{ borderColor: overdueFilter ? 'var(--danger)' : undefined }}
+            style={{ borderColor: overdueFilter ? 'var(--danger)' : undefined, display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
             onClick={() => { setOverdueFilter(true); setTaskStatusFilter(''); }}
           >
-            ⚠️ Overdue
+            <FiAlertTriangle style={{ color: 'var(--danger)' }} /> Overdue
           </button>
         </div>
 
@@ -426,10 +442,9 @@ export default function ProjectDetails() {
           </div>
         ) : tasks.length === 0 ? (
           <EmptyState
-            icon="📋"
             title="No tasks found"
             description="There are no tasks matching your selected filters."
-            actionLabel="+ Create Task"
+            actionLabel="Create Task"
             onAction={() => { setEditingTask(null); setIsTaskModalOpen(true); }}
           />
         ) : (
@@ -463,10 +478,9 @@ export default function ProjectDetails() {
                   </div>
 
                   <div className="task-actions">
-                    {/* Status inline selector */}
                     <select
                       className="form-select"
-                      style={{ padding: '0.35rem 0.6rem', fontSize: '0.82rem', width: 'auto' }}
+                      style={{ padding: '0.35rem 0.6rem', fontSize: 'var(--font-xs)', width: 'auto' }}
                       value={task.status}
                       onChange={(e) => handleStatusChange(task._id, e.target.value)}
                     >
@@ -480,7 +494,7 @@ export default function ProjectDetails() {
                       onClick={() => { setEditingTask(task); setIsTaskModalOpen(true); }}
                       title="Edit Task"
                     >
-                      ✏️
+                      <FiEdit3 />
                     </button>
 
                     <button
@@ -489,7 +503,7 @@ export default function ProjectDetails() {
                       title="Delete Task"
                       style={{ color: 'var(--danger)' }}
                     >
-                      🗑️
+                      <FiTrash2 />
                     </button>
                   </div>
                 </div>
