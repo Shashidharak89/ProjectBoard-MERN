@@ -35,7 +35,6 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-// Compound index for querying user projects efficiently
-projectSchema.index({ members: 1, name: 'text', description: 'text' });
+projectSchema.index({ name: 1, description: 1 });
 
 module.exports = mongoose.model('Project', projectSchema);
