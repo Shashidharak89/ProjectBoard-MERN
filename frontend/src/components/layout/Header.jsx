@@ -22,9 +22,9 @@ export const Header = ({ onToggleSidebar }) => {
 
       <div className="header-right">
         {user && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className="user-profile-info">
             <Avatar name={user.name} size={36} />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="user-details-text">
               <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)', lineHeight: 1.2 }}>
                 {user.name}
               </span>

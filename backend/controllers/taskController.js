@@ -1,4 +1,5 @@
 const { Task, TASK_STATUSES } = require('../models/Task');
+const TaskAssignment = require('../models/TaskAssignment');
 const Project = require('../models/Project');
 
 // Helper to check user project membership
@@ -10,6 +11,20 @@ const checkProjectMembership = async (projectId, userId) => {
   const isMember = project.members.some((m) => m.toString() === userId.toString());
 
   return { project, isMember: isOwner || isMember, isOwner };
+};
+
+// Helper to populate assignedUsers from TaskAssignment collection
+const populateTaskWithAssignments = async (taskDoc) => {
+  const taskObj = taskDoc.toObject ? taskDoc.toObject() : taskDoc;
+  const assignments = await TaskAssignment.find({ taskId: taskObj._id }).populate(
+    'userId',
+    'name email'
+  );
+  const assignedUsers = assignments.map((a) => a.userId).filter(Boolean);
+  return {
+    ...taskObj,
+    assignedUsers,
+  };
 };
 
 // @desc    Create task in project
@@ -51,10 +66,10 @@ const createTask = async (req, res, next) => {
     }
 
     // Validate assigned users are project members
-    let finalAssigned = [];
+    let validAssignedUserIds = [];
     if (Array.isArray(assignedUsers) && assignedUsers.length > 0) {
       const invalidUsers = assignedUsers.filter(
-        (userId) => !project.members.some((m) => m.toString() === userId.toString())
+        (uId) => !project.members.some((m) => m.toString() === uId.toString())
       );
 
       if (invalidUsers.length > 0) {
@@ -63,27 +78,36 @@ const createTask = async (req, res, next) => {
           message: 'Cannot assign task to users who are not project members',
         });
       }
-      finalAssigned = assignedUsers;
+      validAssignedUserIds = assignedUsers;
     }
 
     const taskStatus = status && TASK_STATUSES.includes(status) ? status : 'in-progress';
 
+    // 1. Create Task document
     const task = await Task.create({
       projectId,
       description: description.trim(),
-      assignedUsers: finalAssigned,
       status: taskStatus,
       deadline: new Date(deadline),
       createdBy: req.user._id,
     });
 
-    const populatedTask = await Task.findById(task._id)
-      .populate('assignedUsers', 'name email')
-      .populate('createdBy', 'name email');
+    // 2. Create TaskAssignment documents in separate collection
+    if (validAssignedUserIds.length > 0) {
+      const assignmentDocs = validAssignedUserIds.map((uId) => ({
+        taskId: task._id,
+        userId: uId,
+        assignedBy: req.user._id,
+      }));
+      await TaskAssignment.insertMany(assignmentDocs);
+    }
+
+    const populatedTask = await Task.findById(task._id).populate('createdBy', 'name email');
+    const resultTask = await populateTaskWithAssignments(populatedTask);
 
     return res.status(201).json({
       success: true,
-      data: populatedTask,
+      data: resultTask,
     });
   } catch (error) {
     next(error);
@@ -129,13 +153,16 @@ const getProjectTasks = async (req, res, next) => {
       query.status = statusFilter;
     }
 
-    if (assignedUserFilter) {
-      query.assignedUsers = assignedUserFilter;
-    }
-
     if (overdueFilter === 'true') {
       query.deadline = { $lt: new Date() };
       query.status = { $ne: 'completed' };
+    }
+
+    // Filter by assigned user via TaskAssignment collection
+    if (assignedUserFilter) {
+      const userAssignments = await TaskAssignment.find({ userId: assignedUserFilter }).select('taskId');
+      const assignedTaskIds = userAssignments.map((a) => a.taskId);
+      query._id = { $in: assignedTaskIds };
     }
 
     const total = await Task.countDocuments(query);
@@ -146,12 +173,16 @@ const getProjectTasks = async (req, res, next) => {
       .sort({ deadline: 1, createdAt: -1 })
       .skip(skip)
       .limit(size)
-      .populate('assignedUsers', 'name email')
       .populate('createdBy', 'name email');
+
+    // Populate assigned users for each task from TaskAssignment collection
+    const tasksWithAssignments = await Promise.all(
+      tasks.map((taskDoc) => populateTaskWithAssignments(taskDoc))
+    );
 
     return res.json({
       success: true,
-      data: tasks,
+      data: tasksWithAssignments,
       pagination: {
         page,
         size,
@@ -172,7 +203,6 @@ const getTaskById = async (req, res, next) => {
     const { taskId } = req.params;
 
     const task = await Task.findById(taskId)
-      .populate('assignedUsers', 'name email')
       .populate('createdBy', 'name email')
       .populate('projectId', 'name description createdBy members');
 
@@ -194,16 +224,18 @@ const getTaskById = async (req, res, next) => {
       });
     }
 
+    const resultTask = await populateTaskWithAssignments(task);
+
     return res.json({
       success: true,
-      data: task,
+      data: resultTask,
     });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Update task details
+// @desc    Update task details & assignments
 // @route   PATCH /api/tasks/:taskId
 // @access  Private (Project Member)
 const updateTask = async (req, res, next) => {
@@ -258,8 +290,10 @@ const updateTask = async (req, res, next) => {
       task.status = status;
     }
 
+    await task.save();
+
+    // Update TaskAssignments collection if assignedUsers array is provided
     if (Array.isArray(assignedUsers)) {
-      // Check if all assignedUsers belong to the project
       const invalidUsers = assignedUsers.filter(
         (uId) => !project.members.some((m) => m.toString() === uId.toString())
       );
@@ -270,18 +304,27 @@ const updateTask = async (req, res, next) => {
           message: 'Cannot assign users who are not project members',
         });
       }
-      task.assignedUsers = assignedUsers;
+
+      // Delete existing assignments for this task
+      await TaskAssignment.deleteMany({ taskId });
+
+      // Insert new assignments
+      if (assignedUsers.length > 0) {
+        const newAssignments = assignedUsers.map((uId) => ({
+          taskId,
+          userId: uId,
+          assignedBy: req.user._id,
+        }));
+        await TaskAssignment.insertMany(newAssignments);
+      }
     }
 
-    await task.save();
-
-    const updatedTask = await Task.findById(taskId)
-      .populate('assignedUsers', 'name email')
-      .populate('createdBy', 'name email');
+    const updatedTaskDoc = await Task.findById(taskId).populate('createdBy', 'name email');
+    const resultTask = await populateTaskWithAssignments(updatedTaskDoc);
 
     return res.json({
       success: true,
-      data: updatedTask,
+      data: resultTask,
     });
   } catch (error) {
     next(error);
@@ -290,7 +333,7 @@ const updateTask = async (req, res, next) => {
 
 // @desc    Update task status
 // @route   PATCH /api/tasks/:taskId/status
-// @access  Private (Assigned User, Project Owner, or Task Creator)
+// @access  Private (Project Member)
 const updateTaskStatus = async (req, res, next) => {
   try {
     const { taskId } = req.params;
@@ -323,13 +366,12 @@ const updateTaskStatus = async (req, res, next) => {
     task.status = status;
     await task.save();
 
-    const updatedTask = await Task.findById(taskId)
-      .populate('assignedUsers', 'name email')
-      .populate('createdBy', 'name email');
+    const updatedTaskDoc = await Task.findById(taskId).populate('createdBy', 'name email');
+    const resultTask = await populateTaskWithAssignments(updatedTaskDoc);
 
     return res.json({
       success: true,
-      data: updatedTask,
+      data: resultTask,
     });
   } catch (error) {
     next(error);
@@ -361,11 +403,15 @@ const deleteTask = async (req, res, next) => {
       });
     }
 
+    // Cascade delete task assignments
+    await TaskAssignment.deleteMany({ taskId });
+
+    // Delete task document
     await task.deleteOne();
 
     return res.json({
       success: true,
-      message: 'Task deleted successfully',
+      message: 'Task and its assignments deleted successfully',
     });
   } catch (error) {
     next(error);

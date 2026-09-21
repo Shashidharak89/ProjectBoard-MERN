@@ -1,5 +1,6 @@
 const Project = require('../models/Project');
 const { Task } = require('../models/Task');
+const TaskAssignment = require('../models/TaskAssignment');
 const User = require('../models/User');
 
 // Helper to calculate progress for a project
@@ -246,10 +247,15 @@ const deleteProject = async (req, res, next) => {
       });
     }
 
-    // Cascade delete associated tasks
+    // Find all tasks for this project
+    const projectTasks = await Task.find({ projectId }).select('_id');
+    const taskIds = projectTasks.map((t) => t._id);
+
+    // Cascade delete associated TaskAssignments and Tasks
+    await TaskAssignment.deleteMany({ taskId: { $in: taskIds } });
     await Task.deleteMany({ projectId });
 
-    // Delete project
+    // Delete project document
     await project.deleteOne();
 
     return res.json({
@@ -371,18 +377,17 @@ const removeMember = async (req, res, next) => {
     project.members = project.members.filter((m) => m.toString() !== userId.toString());
     await project.save();
 
-    // Clean up task assignments: remove userId from assignedUsers in all project tasks
-    await Task.updateMany(
-      { projectId },
-      { $pull: { assignedUsers: userId } }
-    );
+    // Clean up task assignments in TaskAssignment collection for this user in this project
+    const projectTasks = await Task.find({ projectId }).select('_id');
+    const taskIds = projectTasks.map((t) => t._id);
+    await TaskAssignment.deleteMany({ userId, taskId: { $in: taskIds } });
 
     const updatedProject = await Project.findById(projectId)
       .populate('members', 'name email');
 
     return res.json({
       success: true,
-      message: 'Member removed successfully and removed from assigned tasks',
+      message: 'Member removed successfully and unassigned from project tasks',
       data: updatedProject.members,
     });
   } catch (error) {

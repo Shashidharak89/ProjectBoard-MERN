@@ -4,18 +4,20 @@
   --primary-hover: #D88E96;
   --secondary: #EFbbc1;
   --secondary-hover: #E3A3A9;
-  --background: #F2E4CA;
+
+  /* Swapped Background & Surface Colors (Lighter body background, Warm Cream surface/header) */
+  --background: #FCFBF8;
+  --surface: #F2E4CA;
+  --surface-card: #FAF2E3;
+  --surface-hover: #F2E4CD;
   --light-accent: #FCC9D2;
   --accent: #CCA470;
   --accent-hover: #B8905B;
 
-  /* Neutral & Surface Colors */
+  /* Neutral & Text Colors */
   --text-primary: #2C2623;
   --text-secondary: #655C56;
   --text-muted: #8E847C;
-  --surface: #FFFFFF;
-  --surface-card: #FAF4EB;
-  --surface-hover: #F5EBDC;
   --border: #E2D3B8;
   --border-focus: #CCA470;
 
@@ -37,6 +39,7 @@
   /* Layout & Spacing */
   --sidebar-width: 280px;
   --header-height: 68px;
+  --footer-height: 60px;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;

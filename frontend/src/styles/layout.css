@@ -57,6 +57,23 @@
   gap: 1rem;
 }
 
+.user-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-details-text {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 640px) {
+  .user-details-text {
+    display: none; /* Hide username and email on small screens */
+  }
+}
+
 /* Hamburger toggle button - ALWAYS shown on top right */
 .hamburger-toggle-btn {
   display: flex;
@@ -75,6 +92,35 @@
 .hamburger-toggle-btn:hover {
   background-color: var(--light-accent);
   border-color: var(--accent);
+}
+
+/* Footer Component Styling */
+.footer {
+  width: 100%;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 /* Right Corner Sidebar Drawer */
@@ -97,7 +143,7 @@
   bottom: 0;
   width: var(--sidebar-width);
   max-width: 85vw;
-  background-color: var(--surface);
+  background-color: var(--surface-card);
   border-left: 1px solid var(--border);
   z-index: 1000;
   display: flex;

@@ -15,13 +15,6 @@ const taskSchema = new mongoose.Schema(
       required: [true, 'Task description is required'],
       trim: true,
     },
-    assignedUsers: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        index: true,
-      },
-    ],
     status: {
       type: String,
       enum: {
@@ -47,13 +40,12 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-// Virtual dynamic property for overdue state
+// Virtual property for dynamic overdue check
 taskSchema.virtual('isOverdue').get(function () {
   if (this.status === 'completed') return false;
   return this.deadline && new Date(this.deadline) < new Date();
 });
 
-// Enable virtuals in JSON response
 taskSchema.set('toJSON', { virtuals: true });
 taskSchema.set('toObject', { virtuals: true });
 
