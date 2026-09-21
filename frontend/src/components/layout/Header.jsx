@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FiMenu } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../common/Avatar';
@@ -9,7 +10,7 @@ export const Header = ({ onToggleSidebar }) => {
 
   return (
     <header className="header">
-      <div className="header-left">
+      <Link to="/dashboard" className="header-left brand-link" title="Go to Dashboard">
         <img
           src={BRANDING.logo}
           alt={BRANDING.name}
@@ -18,7 +19,7 @@ export const Header = ({ onToggleSidebar }) => {
         <div className="brand-title">
           {BRANDING.name}
         </div>
-      </div>
+      </Link>
 
       <div className="header-right">
         {user && (

@@ -32,6 +32,13 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.header-left:hover {
+  opacity: 0.85;
 }
 
 .brand-logo-img {
