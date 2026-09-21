@@ -264,14 +264,18 @@ export default function ProjectDetails() {
   const existingMemberIds = (project.members || []).map((m) => m._id || m);
 
   return (
-    <div>
+    <div className="animate-page-entrance">
       {/* Project Banner & Details */}
       <div className="project-details-header">
         <div className="project-details-title-row">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
               <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>{project.name}</h1>
-              {isOwner && <span className="badge badge-default" style={{ backgroundColor: 'var(--accent)', color: '#fff' }}>Owner</span>}
+              {isOwner ? (
+                <span className="badge badge-owner">Owner</span>
+              ) : (
+                <span className="badge badge-member">Member</span>
+              )}
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-base)', maxWidth: '800px' }}>
               {project.description || 'No description provided.'}
@@ -301,7 +305,7 @@ export default function ProjectDetails() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: '1rem',
-            backgroundColor: 'var(--surface)',
+            backgroundColor: 'var(--pink-50)',
             padding: '1.2rem',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--border)',
@@ -310,7 +314,7 @@ export default function ProjectDetails() {
         >
           <div>
             <div style={{ fontSize: 'var(--font-xs)', color: 'var(--text-secondary)', fontWeight: 600 }}>TOTAL TASKS</div>
-            <div style={{ fontSize: 'var(--font-xl)', fontWeight: 800 }}>{project.totalTasks || 0}</div>
+            <div style={{ fontSize: 'var(--font-xl)', fontWeight: 800, color: 'var(--rose-deep)' }}>{project.totalTasks || 0}</div>
           </div>
           <div>
             <div style={{ fontSize: 'var(--font-xs)', color: 'var(--success)', fontWeight: 600 }}>COMPLETED</div>
@@ -329,7 +333,7 @@ export default function ProjectDetails() {
       {/* Members Section */}
       <div className="card" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700 }}>Project Members ({(project.members || []).length})</h3>
+          <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 700, color: 'var(--rose-deep)' }}>Project Members ({(project.members || []).length})</h3>
           {isOwner && (
             <Button variant="secondary" size="sm" onClick={() => setIsAddMemberOpen(true)} style={{ gap: '0.4rem' }}>
               <FiUserPlus />
@@ -350,8 +354,8 @@ export default function ProjectDetails() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.6rem',
-                  padding: '0.5rem 0.8rem',
-                  backgroundColor: 'var(--surface)',
+                  padding: '0.5rem 0.85rem',
+                  backgroundColor: 'var(--pink-50)',
                   borderRadius: 'var(--radius-full)',
                   border: '1px solid var(--border)',
                   fontSize: 'var(--font-sm)',
@@ -360,11 +364,15 @@ export default function ProjectDetails() {
               >
                 <Avatar name={member.name || 'User'} size={26} />
                 <span>{member.name || 'User'}</span>
-                {isProjectOwner && <span style={{ fontSize: 'var(--font-xs)', color: 'var(--accent)' }}>(Owner)</span>}
+                {isProjectOwner ? (
+                  <span className="badge badge-owner" style={{ padding: '0.15rem 0.45rem', fontSize: '0.65rem' }}>Owner</span>
+                ) : (
+                  <span className="badge badge-member" style={{ padding: '0.15rem 0.45rem', fontSize: '0.65rem' }}>Member</span>
+                )}
                 {isOwner && !isProjectOwner && (
                   <button
                     onClick={() => setRemovingMemberId(memberId)}
-                    style={{ color: 'var(--danger)', fontSize: '0.9rem', marginLeft: '0.3rem', display: 'flex', alignItems: 'center' }}
+                    style={{ color: 'var(--danger)', fontSize: '0.9rem', marginLeft: '0.2rem', display: 'flex', alignItems: 'center' }}
                     title="Remove member"
                   >
                     <FiX />
@@ -380,7 +388,7 @@ export default function ProjectDetails() {
       <div>
         <div className="task-filters-bar">
           <div>
-            <h2 style={{ fontSize: 'var(--font-xl)', fontWeight: 800 }}>Tasks</h2>
+            <h2 style={{ fontSize: 'var(--font-xl)', fontWeight: 800, color: 'var(--rose-deep)' }}>Tasks</h2>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -468,7 +476,7 @@ export default function ProjectDetails() {
                         <span>Assigned:</span>
                         <div className="avatar-group">
                           {assignedUsers.length === 0 ? (
-                            <span style={{ fontStyle: 'italic' }}>Unassigned</span>
+                            <span style={{ fontStyle: 'italic', color: 'var(--text-muted)' }}>Unassigned</span>
                           ) : (
                             assignedUsers.map((u) => <Avatar key={u._id || u} name={u.name || 'User'} size={24} />)
                           )}

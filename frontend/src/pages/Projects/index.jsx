@@ -27,32 +27,30 @@ export default function Projects() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [creating, setCreating] = useState(false);
 
-  const fetchProjects = useCallback(async (page = 1, searchQuery = search) => {
+  const loadProjects = useCallback((page = 1, searchQuery = search) => {
     setLoading(true);
     setError(null);
-    try {
-      const res = await getProjectsApi({ page, size: 20, search: searchQuery });
-      if (res.success) {
-        setProjects(res.data);
-        setPagination(res.pagination);
-      }
-    } catch (err) {
-      setError(err.message || 'Failed to load projects');
-    } finally {
-      setLoading(false);
-    }
+    getProjectsApi({ page, size: 20, search: searchQuery })
+      .then((res) => {
+        if (res.success) {
+          setProjects(res.data);
+          setPagination(res.pagination);
+        }
+      })
+      .catch((err) => setError(err.message || 'Failed to load projects'))
+      .finally(() => setLoading(false));
   }, [search]);
 
   useEffect(() => {
-    fetchProjects(1, search);
-  }, [search, fetchProjects]);
+    loadProjects(1, search);
+  }, [search, loadProjects]);
 
   const handleSearchChange = (newSearch) => {
     setSearch(newSearch);
   };
 
   const handlePageChange = (newPage) => {
-    fetchProjects(newPage, search);
+    loadProjects(newPage, search);
   };
 
   const handleCreateProject = async (projectData) => {
@@ -62,7 +60,7 @@ export default function Projects() {
       if (res.success) {
         showToast(`Project "${res.data.name}" created successfully!`, 'success');
         setIsCreateModalOpen(false);
-        fetchProjects(1, search);
+        loadProjects(1, search);
       }
     } catch (err) {
       showToast(err.message || 'Failed to create project', 'error');
@@ -72,7 +70,7 @@ export default function Projects() {
   };
 
   return (
-    <div>
+    <div className="animate-page-entrance">
       <div className="projects-header">
         <div>
           <h1 style={{ fontSize: 'var(--font-2xl)', fontWeight: 800, color: 'var(--text-primary)' }}>Projects</h1>
@@ -99,7 +97,7 @@ export default function Projects() {
           <Skeleton height="200px" count={6} />
         </div>
       ) : error ? (
-        <ErrorState message={error} onRetry={() => fetchProjects(pagination.page, search)} />
+        <ErrorState message={error} onRetry={() => loadProjects(pagination.page, search)} />
       ) : projects.length === 0 ? (
         <EmptyState
           icon={<FiFolder />}
@@ -129,10 +127,10 @@ export default function Projects() {
                       >
                         {project.name}
                       </Link>
-                      {isOwner && (
-                        <span className="badge badge-default" style={{ backgroundColor: 'var(--accent)', color: '#fff' }}>
-                          Owner
-                        </span>
+                      {isOwner ? (
+                        <span className="badge badge-owner">Owner</span>
+                      ) : (
+                        <span className="badge badge-member">Member</span>
                       )}
                     </div>
 
